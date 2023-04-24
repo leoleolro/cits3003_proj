@@ -52,10 +52,9 @@ void PanningCamera::update(const Window& window, float dt, bool controls_enabled
     float cos_yaw = glm::cos(yaw);
     glm::mat4 yaw_matrix = glm::mat4(cos_yaw, 0, sin_yaw, 0,
                                     0,        1, 0,      0,
-    -                               sin_yaw, 0, cos_yaw, 0,
+                                    -sin_yaw, 0, cos_yaw, 0,
                                     0,      0,      0,   1);
 
-    view_matrix = view_matrix*yaw_matrix;
 
     float cos_pitch = cos(pitch);
     float sin_pitch = sin(pitch);
@@ -63,7 +62,9 @@ void PanningCamera::update(const Window& window, float dt, bool controls_enabled
                                         0, cos_pitch, -sin_pitch, 0,
                                         0, sin_pitch, cos_pitch, 0,
                                         0, 0, 0, 1);
-    view_matrix = view_matrix*pitch_matrix;
+
+    glm::mat tranformed_matrix = yaw_matrix*pitch_matrix;
+    view_matrix = view_matrix*tranformed_matrix;
 
     projection_matrix = glm::infinitePerspective(fov, window.get_framebuffer_aspect_ratio(), 1.0f);
     inverse_projection_matrix = glm::inverse(projection_matrix);
