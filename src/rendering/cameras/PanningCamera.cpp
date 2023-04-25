@@ -69,7 +69,7 @@ void PanningCamera::update(const Window& window, float dt, bool controls_enabled
 
     glm::mat4 tranformed_matrix = yaw_matrix*pitch_matrix;
 
-    glm::mat movement_matrix = glm::translate(glm::vec3{-focus_point[0],-focus_point[1],-focus_point[2]});
+    glm::mat4 movement_matrix = glm::translate(glm::vec3{-focus_point[0],-focus_point[1],-focus_point[2]});
     view_matrix = view_matrix*tranformed_matrix*movement_matrix;
     
 
