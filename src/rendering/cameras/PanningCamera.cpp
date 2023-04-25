@@ -7,6 +7,8 @@
 #include "utility/Math.h"
 #include "rendering/imgui/ImGuiManager.h"
 
+#include <iostream>
+
 PanningCamera::PanningCamera() : distance(init_distance), focus_point(init_focus_point), pitch(init_pitch), yaw(init_yaw), near(init_near), fov(init_fov) {}
 
 PanningCamera::PanningCamera(float distance, glm::vec3 focus_point, float pitch, float yaw, float near, float fov)
@@ -35,9 +37,10 @@ void PanningCamera::update(const Window& window, float dt, bool controls_enabled
             distance -= ZOOM_SCROLL_MULTIPLIER * ZOOM_SPEED * window.get_scroll_delta();
 
             auto is_dragging = window.is_mouse_pressed(GLFW_MOUSE_BUTTON_RIGHT) || window.is_mouse_pressed(GLFW_MOUSE_BUTTON_MIDDLE);
-            if (is_dragging) {
-                window.set_cursor_disabled(true);
-            }
+            // if (is_dragging) {
+            //     window.set_cursor_disabled(true);
+            // }
+            //commented out to see mouse
         }
     }
 
@@ -48,6 +51,7 @@ void PanningCamera::update(const Window& window, float dt, bool controls_enabled
     view_matrix = glm::translate(glm::vec3{0.0f, 0.0f, -distance});
     inverse_view_matrix = glm::inverse(view_matrix);
 
+    ////////////////////////////////////////////TASK A////////////////////////////////////////////
     float sin_yaw = glm::sin(yaw);
     float cos_yaw = glm::cos(yaw);
     glm::mat4 yaw_matrix = glm::mat4(cos_yaw, 0, sin_yaw, 0,
@@ -63,8 +67,11 @@ void PanningCamera::update(const Window& window, float dt, bool controls_enabled
                                         0, sin_pitch, cos_pitch, 0,
                                         0, 0, 0, 1);
 
-    glm::mat tranformed_matrix = yaw_matrix*pitch_matrix;
-    view_matrix = view_matrix*tranformed_matrix;
+    glm::mat4 tranformed_matrix = yaw_matrix*pitch_matrix;
+
+    glm::mat movement_matrix = glm::translate(glm::vec3{-focus_point[0],-focus_point[1],-focus_point[2]});
+    view_matrix = view_matrix*tranformed_matrix*movement_matrix;
+    
 
     projection_matrix = glm::infinitePerspective(fov, window.get_framebuffer_aspect_ratio(), 1.0f);
     inverse_projection_matrix = glm::inverse(projection_matrix);
