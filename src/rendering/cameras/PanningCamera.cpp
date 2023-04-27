@@ -49,11 +49,10 @@ void PanningCamera::update(const Window& window, float dt, bool controls_enabled
     distance = clamp(distance, MIN_DISTANCE, MAX_DISTANCE);
 
     view_matrix = glm::translate(glm::vec3{0.0f, 0.0f, -distance});
-    inverse_view_matrix = glm::inverse(view_matrix);
 
     ////////////////////////////////////////////TASK A////////////////////////////////////////////
-    float sin_yaw = glm::sin(yaw);
-    float cos_yaw = glm::cos(yaw);
+    float sin_yaw = glm::sin(glm::radians(glm::degrees(yaw)+45));
+    float cos_yaw = glm::cos(glm::radians(glm::degrees(yaw)+45));
     glm::mat4 yaw_matrix = glm::mat4(cos_yaw, 0, sin_yaw, 0,
                                     0,        1, 0,      0,
                                     -sin_yaw, 0, cos_yaw, 0,
@@ -72,6 +71,7 @@ void PanningCamera::update(const Window& window, float dt, bool controls_enabled
     glm::mat4 movement_matrix = glm::translate(glm::vec3{-focus_point[0],-focus_point[1],-focus_point[2]});
     view_matrix = view_matrix*tranformed_matrix*movement_matrix;
     
+    inverse_view_matrix = glm::inverse(view_matrix);
 
     projection_matrix = glm::infinitePerspective(fov, window.get_framebuffer_aspect_ratio(), 1.0f);
     inverse_projection_matrix = glm::inverse(projection_matrix);
