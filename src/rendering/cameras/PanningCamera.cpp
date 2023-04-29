@@ -51,25 +51,9 @@ void PanningCamera::update(const Window& window, float dt, bool controls_enabled
     view_matrix = glm::translate(glm::vec3{0.0f, 0.0f, -distance});
 
     ////////////////////////////////////////////TASK A////////////////////////////////////////////
-    float sin_yaw = glm::sin(glm::radians(glm::degrees(yaw)+45));
-    float cos_yaw = glm::cos(glm::radians(glm::degrees(yaw)+45));
-    glm::mat4 yaw_matrix = glm::mat4(cos_yaw, 0, sin_yaw, 0,
-                                    0,        1, 0,      0,
-                                    -sin_yaw, 0, cos_yaw, 0,
-                                    0,      0,      0,   1);
-
-
-    float cos_pitch = cos(pitch);
-    float sin_pitch = sin(pitch);
-    glm::mat4 pitch_matrix = glm::mat4(1, 0, 0, 0,
-                                        0, cos_pitch, -sin_pitch, 0,
-                                        0, sin_pitch, cos_pitch, 0,
-                                        0, 0, 0, 1);
-
-    glm::mat4 tranformed_matrix = yaw_matrix*pitch_matrix;
-
-    glm::mat4 movement_matrix = glm::translate(glm::vec3{-focus_point[0],-focus_point[1],-focus_point[2]});
-    view_matrix = view_matrix*tranformed_matrix*movement_matrix;
+    glm::vec3 direction(cos(pitch) * sin(yaw),sin(pitch),cos(pitch) * cos(yaw));
+    glm::vec3 position = focus_point - distance * direction;
+    view_matrix = glm::lookAt(position, focus_point, glm::vec3(0, 1, 0));    
     
     inverse_view_matrix = glm::inverse(view_matrix);
 
