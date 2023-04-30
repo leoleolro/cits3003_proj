@@ -56,8 +56,8 @@ void PanningCamera::update(const Window& window, float dt, bool controls_enabled
     float sin_pitch = sin(pitch);
     float cos_pitch = cos(pitch);
     glm::vec3 direction(cos_pitch * sin_yaw,sin_pitch,cos_pitch * cos_yaw);
-    glm::vec3 position = focus_point - distance * direction;
-    view_matrix = glm::lookAt(position, focus_point, glm::vec3(0, 1, 0));    
+    glm::vec3 eye = focus_point - distance * direction;
+    view_matrix = glm::lookAt(eye, focus_point, glm::vec3(0.0f, 1.0f, 0.0f));    
     
     inverse_view_matrix = glm::inverse(view_matrix);
 
