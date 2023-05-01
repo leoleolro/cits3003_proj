@@ -48,16 +48,14 @@ void PanningCamera::update(const Window& window, float dt, bool controls_enabled
     pitch = clamp(pitch, PITCH_MIN, PITCH_MAX);
     distance = clamp(distance, MIN_DISTANCE, MAX_DISTANCE);
 
-    view_matrix = glm::translate(glm::vec3{0.0f, 0.0f, -distance});
 
     ////////////////////////////////////////////TASK A////////////////////////////////////////////
-    float sin_yaw = sin(yaw);
-    float cos_yaw = cos(yaw);
-    float sin_pitch = sin(pitch);
-    float cos_pitch = cos(pitch);
-    glm::vec3 direction(cos_pitch * sin_yaw,sin_pitch,cos_pitch * cos_yaw);
-    glm::vec3 eye = focus_point - distance * direction;
-    view_matrix = glm::lookAt(eye, focus_point, glm::vec3(0.0f, 1.0f, 0.0f));    
+    view_matrix = glm::translate(glm::vec3{0.0f, 0.0f, -distance})
+        * glm::rotate(-pitch,glm::vec3(1.0f,0.0f,0.0f))
+        * glm::rotate(-yaw,glm::vec3(0.0f,1.0f,0.0f))
+        * glm::translate(-focus_point);
+
+    //move the cam, rotation around the y, then rotation around the x, then move back to camera distance  
     
     inverse_view_matrix = glm::inverse(view_matrix);
 
