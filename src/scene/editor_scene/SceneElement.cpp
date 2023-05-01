@@ -95,6 +95,7 @@ void EditorScene::LocalTransformComponent::add_local_transform_imgui_edit_sectio
 
 glm::mat4 EditorScene::LocalTransformComponent::calc_model_matrix() const {
     return glm::translate(position) * glm::scale(scale)
+    ////////////////////////TASK B////////////////////////////////////
     * glm::rotate(euler_rotation[0],glm::vec3(1.0f,0.0f,0.0f))
     * glm::rotate(euler_rotation[1],glm::vec3(0.0f,1.0f,0.0f))
     * glm::rotate(euler_rotation[2],glm::vec3(0.0f,0.0f,1.0f));
@@ -119,7 +120,14 @@ void EditorScene::LitMaterialComponent::add_material_imgui_edit_section(MasterRe
     // Set this to true if the user has changed any of the material values, otherwise the changes won't be propagated
     bool material_changed = false;
     ImGui::Text("Material");
-
+    //TASK C AND D
+    material_changed |= ImGui::ColorEdit3("Diffuse Tint", &material.diffuse_tint[0]);
+    material_changed |= ImGui::DragFloat("Diffuse Factor",&material.diffuse_tint[3],0.01f,0.0f,1.0f);
+    material_changed |= ImGui::ColorEdit3("Specular Tint", &material.specular_tint[0]);
+    material_changed |= ImGui::DragFloat("Specular Factor", &material.specular_tint[3],0.01f,0.0f);
+    material_changed |= ImGui::ColorEdit3("Ambient Tint", &material.ambient_tint[0]);
+    material_changed |= ImGui::DragFloat("Ambient Factor", &material.ambient_tint[3],0.01f,0.0f);
+    material_changed |= ImGui::DragFloat("Shininess", &material.shininess, 1.0f, 0.0f,138.0f);
     // Add UI controls here
 
     ImGui::Spacing();
