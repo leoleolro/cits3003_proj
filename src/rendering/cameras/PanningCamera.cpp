@@ -58,8 +58,8 @@ void PanningCamera::update(const Window& window, float dt, bool controls_enabled
     //move the cam, rotation around the y, then rotation around the x, then move back to camera distance  
     
     inverse_view_matrix = glm::inverse(view_matrix);
-
-    projection_matrix = glm::infinitePerspective(fov, window.get_framebuffer_aspect_ratio(), 1.0f);
+    //Task E, Addition of near value
+    projection_matrix = glm::infinitePerspective(fov, window.get_framebuffer_aspect_ratio(), near);
     inverse_projection_matrix = glm::inverse(projection_matrix);
 }
 

@@ -29,6 +29,8 @@ const float ambient_factor = 0.002f;
 // Point Lights
 void point_light_calculation(PointLightData point_light, LightCalculatioData calculation_data, float shininess, inout vec3 total_diffuse, inout vec3 total_specular, inout vec3 total_ambient) {
     vec3 ws_light_offset = point_light.position - calculation_data.ws_frag_position;
+    //converting vec3 to scalar value to have a distance value
+    float dist = dot(ws_light_offset, ws_light_offset);
 
     // Ambient
     vec3 ambient_component = ambient_factor * point_light.colour;
@@ -42,10 +44,10 @@ void point_light_calculation(PointLightData point_light, LightCalculatioData cal
     vec3 ws_halfway_dir = normalize(ws_light_dir + calculation_data.ws_view_dir);
     float specular_factor = pow(max(dot(calculation_data.ws_normal, ws_halfway_dir), 0.0f), shininess);
     vec3 specular_component = specular_factor * point_light.colour;
-
-    total_diffuse += diffuse_component;
-    total_specular += specular_component;
-    total_ambient += ambient_component;
+    //incorporating distanct calculation
+    total_diffuse += diffuse_component/(dist*dist);
+    total_specular += specular_component/(dist*dist);
+    total_ambient += ambient_component/(dist*dist);
 }
 
 // Total Calculation

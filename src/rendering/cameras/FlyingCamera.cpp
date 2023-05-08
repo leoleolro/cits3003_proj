@@ -95,13 +95,14 @@ void FlyingCamera::update(const Window& window, float dt, bool controlsEnabled) 
     yaw = std::fmod(yaw + YAW_PERIOD, YAW_PERIOD);
     pitch = clamp(pitch, PITCH_MIN, PITCH_MAX);
 
-    view_matrix =
+    view_matrix =   
         glm::rotate(-pitch, glm::vec3{1.0f, 0.0f, 0.0f}) *
         glm::rotate(-yaw, glm::vec3{0.0f, 1.0f, 0.0f}) *
         glm::translate(-position);
     inverse_view_matrix = glm::inverse(view_matrix);
-
-    projection_matrix = glm::infinitePerspective(fov, window.get_framebuffer_aspect_ratio(), 1.0f);
+    //Task E, (near value_)
+    projection_matrix = glm::infinitePerspective(fov, window.get_framebuffer_aspect_ratio(), near);
+    
     inverse_projection_matrix = glm::inverse(projection_matrix);
 }
 
