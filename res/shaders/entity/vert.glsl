@@ -20,6 +20,8 @@ uniform vec3 diffuse_tint;
 uniform vec3 specular_tint;
 uniform vec3 ambient_tint;
 uniform float shininess;
+//TASK C
+uniform float texture_scaling;
 
 // Light Data
 #if NUM_PL > 0
@@ -36,7 +38,8 @@ void main() {
     // Transform vertices
     vec3 ws_position = (model_matrix * vec4(vertex_position, 1.0f)).xyz;
     vec3 ws_normal = normalize(normal_matrix * normal);
-    vertex_out.texture_coordinate = texture_coordinate;
+    //TASK C
+    vertex_out.texture_coordinate = texture_coordinate*texture_scaling;
 
     gl_Position = projection_view_matrix * vec4(ws_position, 1.0f);
 

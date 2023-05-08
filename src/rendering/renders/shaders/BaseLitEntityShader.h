@@ -24,6 +24,8 @@ struct BaseLitEntityMaterial {
     glm::vec4 specular_tint;
     glm::vec4 ambient_tint;
     float shininess;
+    //TASK C
+    float texture_scaling = 1.0f;
 };
 
 struct BaseLitEntityInstanceData : public BaseEntityInstanceData {
@@ -53,6 +55,8 @@ protected:
     int specular_tint_location{};
     int ambient_tint_location{};
     int shininess_location{};
+    //TASK C
+    int texture_scaling{};
 
     static const uint POINT_LIGHT_BINDING = 0;
 

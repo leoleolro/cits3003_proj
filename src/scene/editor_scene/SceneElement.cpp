@@ -122,12 +122,13 @@ void EditorScene::LitMaterialComponent::add_material_imgui_edit_section(MasterRe
     ImGui::Text("Material");
     //TASK C AND D
     material_changed |= ImGui::ColorEdit3("Diffuse Tint", &material.diffuse_tint[0]);
-    material_changed |= ImGui::DragFloat("Diffuse Factor",&material.diffuse_tint[3],0.01f,0.0f,5.0f);
+    material_changed |= ImGui::DragFloat("Diffuse Factor",&material.diffuse_tint[3],0.01f,0.0f,50.0f);
     material_changed |= ImGui::ColorEdit3("Specular Tint", &material.specular_tint[0]);
-    material_changed |= ImGui::DragFloat("Specular Factor", &material.specular_tint[3],0.01f,0.0f,5.0f);
+    material_changed |= ImGui::DragFloat("Specular Factor", &material.specular_tint[3],0.01f,0.0f,50.0f);
     material_changed |= ImGui::ColorEdit3("Ambient Tint", &material.ambient_tint[0]);
-    material_changed |= ImGui::DragFloat("Ambient Factor", &material.ambient_tint[3],0.01f,0.0f,5.0f);
+    material_changed |= ImGui::DragFloat("Ambient Factor", &material.ambient_tint[3],0.01f,0.0f,50.0f);
     material_changed |= ImGui::DragFloat("Shininess", &material.shininess, 1.0f, 0.0f,138.0f);
+    material_changed |= ImGui::DragFloat("Texture Scale", &material.texture_scaling, 0.01f);
     // Add UI controls here
 
     ImGui::Spacing();
@@ -142,6 +143,8 @@ void EditorScene::LitMaterialComponent::update_material_from_json(const json& js
     material.specular_tint = m["specular_tint"];
     material.ambient_tint = m["ambient_tint"];
     material.shininess = m["shininess"];
+    //TASK C
+    material.texture_scaling = m["texture_scaling"];
 }
 
 json EditorScene::LitMaterialComponent::material_into_json() const {
@@ -150,6 +153,8 @@ json EditorScene::LitMaterialComponent::material_into_json() const {
         {"specular_tint", material.specular_tint},
         {"ambient_tint", material.ambient_tint},
         {"shininess", material.shininess},
+        //TASK C
+        {"texture_scaling", material.texture_scaling},
     }};
 }
 
