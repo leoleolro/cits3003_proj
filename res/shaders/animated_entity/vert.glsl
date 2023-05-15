@@ -41,6 +41,11 @@ uniform mat4 projection_view_matrix;
 
 uniform sampler2D specular_map_texture;
 
+//TASK G
+out vec3 fN;
+out vec3 fV;
+out vec3 fL;
+
 void main() {
     // Transform vertices
     float sum = dot(bone_weights, vec4(1.0f));
@@ -63,12 +68,18 @@ void main() {
 
     // Per vertex light calcs are below this point
     vec3 ws_view_dir = normalize(ws_view_position - ws_position);
-    LightCalculatioData light_calculation_data = LightCalculatioData(ws_position, ws_view_dir, ws_normal);
-    Material material = Material(diffuse_tint, specular_tint, ambient_tint, shininess);
 
-    vertex_out.lighting_result = total_light_calculation(light_calculation_data, material
-        #if NUM_PL > 0
-        ,point_lights
-        #endif
-    );
+    //TASK G
+    fN = ws_normal;
+    fV = ws_position;
+    fL = ws_view_dir;
+
+    //LightCalculatioData light_calculation_data = LightCalculatioData(ws_position, ws_view_dir, ws_normal);
+    //Material material = Material(diffuse_tint, specular_tint, ambient_tint, shininess);
+
+    //vertex_out.lighting_result = total_light_calculation(light_calculation_data, material
+    //    #if NUM_PL > 0
+    //    ,point_lights
+    //    #endif
+    //);
 }

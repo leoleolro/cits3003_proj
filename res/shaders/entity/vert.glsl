@@ -34,23 +34,32 @@ layout (std140) uniform PointLightArray {
 uniform vec3 ws_view_position;
 uniform mat4 projection_view_matrix;
 
+//TASK G
+out vec3 fN;
+out vec3 fV;
+out vec3 fL;
 void main() {
     // Transform vertices
     vec3 ws_position = (model_matrix * vec4(vertex_position, 1.0f)).xyz;
     vec3 ws_normal = normalize(normal_matrix * normal);
     //TASK C
     vertex_out.texture_coordinate = texture_coordinate*texture_scaling;
-
+    
     gl_Position = projection_view_matrix * vec4(ws_position, 1.0f);
 
     // Per vertex lighting
     vec3 ws_view_dir = normalize(ws_view_position - ws_position);
-    LightCalculatioData light_calculation_data = LightCalculatioData(ws_position, ws_view_dir, ws_normal);
-    Material material = Material(diffuse_tint, specular_tint, ambient_tint, shininess);
+    //LightCalculatioData light_calculation_data = LightCalculatioData(ws_position, ws_view_dir, ws_normal);
+    //Material material = Material(diffuse_tint, specular_tint, ambient_tint, shininess);
 
-    vertex_out.lighting_result = total_light_calculation(light_calculation_data, material
-        #if NUM_PL > 0
-        ,point_lights
-        #endif
-    );
+    //TASK G
+    fN = ws_normal;
+    fV = ws_position;
+    fL = ws_view_dir;
+
+    //vertex_out.lighting_result = total_light_calculation(light_calculation_data, material
+    //    #if NUM_PL > 0
+    //    ,point_lights
+    //    #endif
+    //);
 }
