@@ -47,7 +47,7 @@ void point_light_calculation(PointLightData point_light, LightCalculatioData cal
     //incorporating distanct calculation
     total_diffuse += diffuse_component/(dist*dist);
     total_specular += specular_component/(dist*dist);
-    total_ambient += ambient_component/(dist*dist);
+    total_ambient += ambient_component;
 }
 
 // Total Calculation
