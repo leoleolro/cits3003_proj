@@ -162,6 +162,8 @@ void EditorScene::EmissiveMaterialComponent::add_emissive_material_imgui_edit_se
     // Set this to true if the user has changed any of the material values, otherwise the changes won't be propagated
     bool material_changed = false;
     ImGui::Text("Emissive Material");
+    material_changed |= ImGui::ColorEdit3("Emission Tint", &material.emission_tint[0]);
+    material_changed |= ImGui::DragFloat("Emisson Factor",&material.emission_tint[3],0.01f,0.0f,50.0f);
 
     // Add UI controls here
 
