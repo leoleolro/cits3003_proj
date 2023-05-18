@@ -38,8 +38,6 @@ namespace EditorScene {
 
         void update_instance_data() override;
         
-        void addAnimation(const std::string& name, const Animation& animation) {animations[name] = animation;}
-
         void add_to_render_scene(MasterRenderScene& target_render_scene) override {
             target_render_scene.insert_entity(rendered_entity);
         }
