@@ -5,6 +5,7 @@
 #include "rendering/imgui/ImGuiManager.h"
 #include "scene/SceneContext.h"
 
+
 std::unique_ptr<EditorScene::AnimatedEntityElement> EditorScene::AnimatedEntityElement::new_default(const SceneContext& scene_context, ElementRef parent) {
     auto rendered_entity = AnimatedEntityRenderer::Entity::create(
         scene_context.model_loader.load_hierarchy_from_file<AnimatedEntityRenderer::VertexData>("cube.obj"),
@@ -19,7 +20,6 @@ std::unique_ptr<EditorScene::AnimatedEntityElement> EditorScene::AnimatedEntityE
             scene_context.texture_loader.default_white_texture()
         }
     );
-
     auto new_entity = std::make_unique<AnimatedEntityElement>(
         parent,
         "New Animated Entity",
@@ -29,7 +29,17 @@ std::unique_ptr<EditorScene::AnimatedEntityElement> EditorScene::AnimatedEntityE
         rendered_entity
     );
 
+    
+    
+    Animation rotateAnimation;
+
+    // Set up keyframes for 360-degree rotation over 1 second (assuming time is in seconds)
+    rotateAnimation.keyframes.push_back({0.0, glm::quat(glm::vec3(0, 0, 0))}); // Start at 0 degrees
+    rotateAnimation.keyframes.push_back({1.0, glm::quat(glm::vec3(0, glm::radians(360.0f), 0))}); // End at 360 degrees
+
+    new_entity->addAnimation("Rotate", rotateAnimation);
     new_entity->update_instance_data();
+    
     return new_entity;
 }
 
@@ -118,3 +128,5 @@ std::shared_ptr<AnimatedEntityInterface> EditorScene::AnimatedEntityElement::get
 AnimationParameters& EditorScene::AnimatedEntityElement::get_animation_parameters() {
     return animation_parameters;
 }
+
+

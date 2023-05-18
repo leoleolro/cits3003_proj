@@ -4,8 +4,20 @@
 #include "SceneElement.h"
 #include "scene/SceneContext.h"
 
+struct Keyframe {
+    float time; // The time of this keyframe
+    glm::quat rotation; // The rotation at this keyframe
+};
+
+struct Animation {
+    std::vector<Keyframe> keyframes;
+};
+
+
 namespace EditorScene {
     class AnimatedEntityElement : virtual public SceneElement, public LocalTransformComponent, public LitMaterialComponent, public AnimationComponent {
+    private:
+        std::unordered_map<std::string, Animation> animations; // A map of animations
     public:
         /// NOTE: Must be unique per element type, as it is used to select generators,
         ///       so if you are creating a new element type make sure to change this to a new unique name.
@@ -25,6 +37,8 @@ namespace EditorScene {
         void add_imgui_edit_section(MasterRenderScene& render_scene, const SceneContext& scene_context) override;
 
         void update_instance_data() override;
+        
+        void addAnimation(const std::string& name, const Animation& animation) {animations[name] = animation;}
 
         void add_to_render_scene(MasterRenderScene& target_render_scene) override {
             target_render_scene.insert_entity(rendered_entity);
@@ -33,6 +47,8 @@ namespace EditorScene {
         void remove_from_render_scene(MasterRenderScene& target_render_scene) override {
             target_render_scene.remove_entity(rendered_entity);
         }
+
+        void addAnimation(const std::string& name, const Animation& animation);
 
         [[nodiscard]] std::shared_ptr<AnimatedEntityInterface> get_entity() override;
         [[nodiscard]] AnimationParameters& get_animation_parameters() override;
