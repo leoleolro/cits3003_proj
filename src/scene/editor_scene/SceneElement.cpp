@@ -38,6 +38,7 @@ std::shared_ptr<TextureHandle> EditorScene::SceneElement::texture_from_json(cons
     return scene_context.texture_loader.load_from_file(json["filename"], json["is_srgb"], json["is_flipped"]);
 }
 
+
 void EditorScene::LocalTransformComponent::add_local_transform_imgui_edit_section(MasterRenderScene& /*render_scene*/, const SceneContext& scene_context) {
     ImGui::Text("Local Transformation");
     bool transformUpdated = false;
@@ -48,6 +49,7 @@ void EditorScene::LocalTransformComponent::add_local_transform_imgui_edit_sectio
     transformUpdated |= ImGui::DragFloat3("Rotation", &euler_rotation_degrees[0]);
     ImGui::DragDisableCursor(scene_context.window);
     euler_rotation = glm::radians(glm::mod(euler_rotation_degrees, 360.0f));
+    //Imgui::Checkbox("Active Rotation",&active_rotation);
 
     {
         // Static also means that all [EntityElement] will share the value
@@ -92,6 +94,8 @@ void EditorScene::LocalTransformComponent::add_local_transform_imgui_edit_sectio
         update_instance_data();
     }
 }
+
+
 
 glm::mat4 EditorScene::LocalTransformComponent::calc_model_matrix() const {
     return glm::translate(position) * glm::scale(scale)
