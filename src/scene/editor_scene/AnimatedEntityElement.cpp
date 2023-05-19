@@ -29,14 +29,12 @@ std::unique_ptr<EditorScene::AnimatedEntityElement> EditorScene::AnimatedEntityE
         rendered_entity
     );
 
-    
-    
+    //define rotate animation
     Animation rotateAnimation;
-
-    // Set up keyframes for 360-degree rotation over 1 second (assuming time is in seconds)
+    // Set up keyframes for 360-degree rotation over 1 second (assuming time is in seconds) 
     rotateAnimation.keyframes.push_back({0.0, glm::quat(glm::vec3(0, 0, 0))}); // Start at 0 degrees
     rotateAnimation.keyframes.push_back({1.0, glm::quat(glm::vec3(0, glm::radians(360.0f), 0))}); // End at 360 degrees
-
+    
     new_entity->addAnimation("Rotate", rotateAnimation);
     new_entity->update_instance_data();
     
@@ -116,6 +114,11 @@ void EditorScene::AnimatedEntityElement::update_instance_data() {
     rendered_entity->instance_data.model_matrix = transform;
     rendered_entity->instance_data.material = material;
 }
+
+void EditorScene::AnimatedEntityElement::addAnimation(const std::string& name, const Animation& animation) {
+    animations[name] = animation;
+}
+
 
 const char* EditorScene::AnimatedEntityElement::element_type_name() const {
     return ELEMENT_TYPE_NAME;
