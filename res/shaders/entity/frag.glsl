@@ -29,15 +29,26 @@ layout (std140) uniform PointLightArray {
     PointLightData point_lights[NUM_PL];
 };
 #endif
+
+//TASK H
+//////////////////////////////////////////////////////////////
+#if NUM_DL > 0
+layout (std140) uniform DirectionalLightArray {
+    DirectionalLightData directional_lights[NUM_DL];
+};
+#endif
 //////////////////////////////////////////////////////////////
 void main() {
-
     //TASK G
     LightCalculatioData light_calculation_data = LightCalculatioData(fV, fL, fN);
     Material material = Material(diffuse_tint, specular_tint, ambient_tint, shininess);
     LightingResult lighting_result = total_light_calculation(light_calculation_data, material
         #if NUM_PL > 0
         ,point_lights
+        #endif
+
+        #if NUM_DL > 0
+        ,directional_lights
         #endif
     );
 
