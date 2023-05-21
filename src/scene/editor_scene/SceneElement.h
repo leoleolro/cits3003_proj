@@ -83,11 +83,13 @@ namespace EditorScene {
     /// A component for a SceneElement to add default local transform behaviour
     class LocalTransformComponent : virtual public SceneElement {
     public:
+        //lock rotation
+        bool rotation_locked = false;
         // Local transformation
         glm::vec3 position;
         glm::vec3 euler_rotation;
         glm::vec3 scale;
-
+        
     protected:
         LocalTransformComponent(const glm::vec3& position, const glm::vec3& euler_rotation, const glm::vec3& scale) : position(position), euler_rotation(euler_rotation), scale(scale) {}
 

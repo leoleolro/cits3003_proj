@@ -38,6 +38,8 @@ std::shared_ptr<TextureHandle> EditorScene::SceneElement::texture_from_json(cons
     return scene_context.texture_loader.load_from_file(json["filename"], json["is_srgb"], json["is_flipped"]);
 }
 
+
+
 void EditorScene::LocalTransformComponent::add_local_transform_imgui_edit_section(MasterRenderScene& /*render_scene*/, const SceneContext& scene_context) {
     ImGui::Text("Local Transformation");
     bool transformUpdated = false;
@@ -45,11 +47,14 @@ void EditorScene::LocalTransformComponent::add_local_transform_imgui_edit_sectio
     ImGui::DragDisableCursor(scene_context.window);
 
     glm::vec3 euler_rotation_degrees = glm::degrees(euler_rotation);
-    transformUpdated |= ImGui::DragFloat3("Rotation", &euler_rotation_degrees[0]);
-    ImGui::DragDisableCursor(scene_context.window);
-    euler_rotation = glm::radians(glm::mod(euler_rotation_degrees, 360.0f));
 
-    {
+        transformUpdated |= ImGui::DragFloat3("Rotation", &euler_rotation_degrees[0]);
+        ImGui::DragDisableCursor(scene_context.window);
+        euler_rotation = glm::radians(glm::mod(euler_rotation_degrees, 360.0f));
+ 
+    ImGui::Checkbox("Lock Rotation", &rotation_locked);
+
+    { 
         // Static also means that all [EntityElement] will share the value
         static bool lock_scale = true;
 
@@ -93,12 +98,17 @@ void EditorScene::LocalTransformComponent::add_local_transform_imgui_edit_sectio
     }
 }
 
+
+
 glm::mat4 EditorScene::LocalTransformComponent::calc_model_matrix() const {
-    return glm::translate(position) * glm::scale(scale)
-    ////////////////////////TASK B////////////////////////////////////
-    * glm::rotate(euler_rotation[0],glm::vec3(1.0f,0.0f,0.0f))
-    * glm::rotate(euler_rotation[1],glm::vec3(0.0f,1.0f,0.0f))
-    * glm::rotate(euler_rotation[2],glm::vec3(0.0f,0.0f,1.0f));
+    auto model = glm::translate(position) * glm::scale(scale);
+
+    if (!rotation_locked) {
+        model = model * glm::rotate(euler_rotation[0], glm::vec3(1.0f, 0.0f, 0.0f)) 
+                * glm::rotate(euler_rotation[1], glm::vec3(0.0f, 1.0f, 0.0f)) 
+                * glm::rotate(euler_rotation[2], glm::vec3(0.0f, 0.0f, 1.0f));
+    }
+    return model;
 }
 
 void EditorScene::LocalTransformComponent::update_local_transform_from_json(const json& json) {

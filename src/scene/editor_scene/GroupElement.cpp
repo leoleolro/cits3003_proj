@@ -19,6 +19,8 @@ void EditorScene::GroupElement::add_imgui_edit_section(MasterRenderScene& render
     ImGui::HelpMarker("These buttons send the command to all animated descendents");
 
     if (ImGui::Button("Start")) {
+
+
         visit_children_recursive([&render_scene](SceneElement& child) {
             auto child_ptr = dynamic_cast<AnimationComponent*>(&child);
             if (child_ptr != nullptr) {
