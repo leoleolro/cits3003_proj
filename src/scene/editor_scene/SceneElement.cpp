@@ -98,17 +98,23 @@ void EditorScene::LocalTransformComponent::add_local_transform_imgui_edit_sectio
     }
 }
 
-
+glm::mat4 previousRotation = glm::rotate(0.0f,glm::vec3{0.0f,0.0f,0.0f});
 
 glm::mat4 EditorScene::LocalTransformComponent::calc_model_matrix() const {
     auto model = glm::translate(position) * glm::scale(scale);
 
     if (!rotation_locked) {
-        model = model * glm::rotate(euler_rotation[0], glm::vec3(1.0f, 0.0f, 0.0f)) 
+        model = model
+                * glm::rotate(euler_rotation[0], glm::vec3(1.0f, 0.0f, 0.0f)) 
                 * glm::rotate(euler_rotation[1], glm::vec3(0.0f, 1.0f, 0.0f)) 
                 * glm::rotate(euler_rotation[2], glm::vec3(0.0f, 0.0f, 1.0f));
+        previousRotation
+                = glm::rotate(euler_rotation[0], glm::vec3(1.0f, 0.0f, 0.0f)) 
+                * glm::rotate(euler_rotation[1], glm::vec3(0.0f, 1.0f, 0.0f)) 
+                * glm::rotate(euler_rotation[2], glm::vec3(0.0f, 0.0f, 1.0f));
+        return model;
     }
-    return model;
+    return model*previousRotation;
 }
 
 void EditorScene::LocalTransformComponent::update_local_transform_from_json(const json& json) {
