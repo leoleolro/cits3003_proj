@@ -11,7 +11,7 @@ std::unique_ptr<EditorScene::DirectionalLightElement> EditorScene::DirectionalLi
         parent,
         "New Directional Light",
         glm::vec3{0.0f, 1.0f, 0.0f},
-        PointLight::create(
+        DirectionalLight::create(
             glm::vec3{}, // Set via update_instance_data()
             glm::vec4{1.0f}
         ),

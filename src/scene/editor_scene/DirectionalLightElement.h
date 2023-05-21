@@ -15,11 +15,11 @@ namespace EditorScene {
         glm::vec3 position;
         bool visible = true;
         float visual_scale = 1.0f;
-        // PointLight and Entity will store World position
-        std::shared_ptr<PointLight> light;
+        // DirectionalLight and Entity will store World position
+        std::shared_ptr<DirectionalLight> light;
         std::shared_ptr<EmissiveEntityRenderer::Entity> light_sphere;
 
-        DirectionalLightElement(const ElementRef& parent, std::string name, glm::vec3 position, std::shared_ptr<PointLight> light, std::shared_ptr<EmissiveEntityRenderer::Entity> light_sphere) :
+        DirectionalLightElement(const ElementRef& parent, std::string name, glm::vec3 position, std::shared_ptr<DirectionalLight> light, std::shared_ptr<EmissiveEntityRenderer::Entity> light_sphere) :
             SceneElement(parent, std::move(name)), position(position), light(std::move(light)), light_sphere(std::move(light_sphere)) {}
 
         static std::unique_ptr<DirectionalLightElement> new_default(const SceneContext& scene_context, ElementRef parent);
@@ -33,16 +33,16 @@ namespace EditorScene {
 
         void add_to_render_scene(MasterRenderScene& target_render_scene) override {
             target_render_scene.insert_entity(light_sphere);
-            target_render_scene.insert_light(light);
+            target_render_scene.insert_directional_light(light);
         }
 
         void remove_from_render_scene(MasterRenderScene& target_render_scene) override {
             target_render_scene.remove_entity(light_sphere);
-            target_render_scene.remove_light(light);
+            target_render_scene.remove_directional_light(light);
         }
 
         [[nodiscard]] const char* element_type_name() const override;
     };
 }
 
-#endif //POINT_LIGHT_ELEMENT_H
+#endif //DIRECTIONAL_LIGHT_ELEMENT_H
