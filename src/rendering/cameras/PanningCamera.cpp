@@ -37,10 +37,9 @@ void PanningCamera::update(const Window& window, float dt, bool controls_enabled
             distance -= ZOOM_SCROLL_MULTIPLIER * ZOOM_SPEED * window.get_scroll_delta();
 
             auto is_dragging = window.is_mouse_pressed(GLFW_MOUSE_BUTTON_RIGHT) || window.is_mouse_pressed(GLFW_MOUSE_BUTTON_MIDDLE);
-            // if (is_dragging) {
-            //     window.set_cursor_disabled(true);
-            // }
-            //commented out to see mouse
+            if (is_dragging) {
+                window.set_cursor_disabled(true);
+            }
         }
     }
 
