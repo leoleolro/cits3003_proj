@@ -27,6 +27,7 @@ struct LightCalculatioData {
 struct PointLightData {
     vec3 position;
     vec3 colour;
+    vec3 attenuation;
 };
 
 //TASK H
@@ -60,8 +61,8 @@ void point_light_calculation(PointLightData point_light, LightCalculatioData cal
     float specular_factor = pow(max(dot(calculation_data.ws_normal, ws_halfway_dir), 0.0f), shininess);
     vec3 specular_component = specular_factor * point_light.colour;
     //incorporating distanct calculation
-    total_diffuse += diffuse_component/(dist*dist);
-    total_specular += specular_component/(dist*dist);
+    total_diffuse += diffuse_component/(point_light.attenuation[0]+(point_light.attenuation[1]*dist)+ point_light.attenuation[2]*(dist*dist));
+    total_specular += specular_component/(point_light.attenuation[0]+(point_light.attenuation[1]*dist)+ point_light.attenuation[2]*(dist*dist));
     total_ambient += ambient_component;
 }
 
@@ -99,6 +100,7 @@ LightingResult total_light_calculation(LightCalculatioData light_calculation_dat
         #if NUM_DL > 0
         ,DirectionalLightData directional_lights[NUM_DL]
         #endif
+
     ) {
 
     vec3 total_diffuse = vec3(0.0f);
