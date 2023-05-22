@@ -61,8 +61,16 @@ void point_light_calculation(PointLightData point_light, LightCalculatioData cal
     float specular_factor = pow(max(dot(calculation_data.ws_normal, ws_halfway_dir), 0.0f), shininess);
     vec3 specular_component = specular_factor * point_light.colour;
     //incorporating distanct calculation
-    total_diffuse += diffuse_component/(point_light.attenuation[0]+(point_light.attenuation[1]*dist)+ point_light.attenuation[2]*(dist*dist));
-    total_specular += specular_component/(point_light.attenuation[0]+(point_light.attenuation[1]*dist)+ point_light.attenuation[2]*(dist*dist));
+    if (point_light.attenuation[0] > 0 || point_light.attenuation[1] > 0 || point_light.attenuation[2] > 0){
+        total_diffuse += diffuse_component/(point_light.attenuation[0]+(point_light.attenuation[1]*dist)+ point_light.attenuation[2]*(dist*dist));
+        total_specular += specular_component/(point_light.attenuation[0]+(point_light.attenuation[1]*dist)+ point_light.attenuation[2]*(dist*dist));
+
+    }
+    else{
+        total_diffuse+=diffuse_component;
+        total_specular+=specular_component;
+    }
+
     total_ambient += ambient_component;
 }
 
@@ -73,8 +81,8 @@ void directional_light_calculation(DirectionalLightData directional_light, Light
     vec3 ambient_component = ambient_factor * directional_light.colour;
 
     // Diffuse
-    vec3 ws_light_dir = normalize(-directional_light.position);
-    float diffuse_factor = max(dot(-ws_light_dir, calculation_data.ws_normal), 0.0f);
+    vec3 ws_light_dir = normalize(directional_light.position);
+    float diffuse_factor = max(dot(ws_light_dir, calculation_data.ws_normal), 0.0f);
     vec3 diffuse_component = diffuse_factor * directional_light.colour;
 
     // Specular
@@ -83,6 +91,8 @@ void directional_light_calculation(DirectionalLightData directional_light, Light
     vec3 specular_component = specular_factor * directional_light.colour;
     //incorporating distanct calculation
     total_diffuse += diffuse_component;
+    total_specular += specular_component;
+    total_ambient += ambient_component;
 }
 // Total Calculation
 
@@ -119,12 +129,8 @@ LightingResult total_light_calculation(LightCalculatioData light_calculation_dat
     }
     #endif
 
-    #if NUM_PL > 0
-    total_ambient /= float(NUM_PL);
-    #endif
-
-    #if NUM_DL > 0
-    total_ambient /= float(NUM_DL);
+    #if NUM_PL+NUM_DL > 0
+    total_ambient /= float(NUM_PL+NUM_DL);
     #endif
 
     total_diffuse *= material.diffuse_tint;
