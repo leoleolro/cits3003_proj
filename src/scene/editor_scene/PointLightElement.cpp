@@ -40,6 +40,7 @@ std::unique_ptr<EditorScene::PointLightElement> EditorScene::PointLightElement::
     light_element->light->colour = j["colour"];
     light_element->visible = j["visible"];
     light_element->visual_scale = j["visual_scale"];
+    light_element->attenuation = j["attenuation"];
 
     light_element->update_instance_data();
     return light_element;
@@ -51,6 +52,7 @@ json EditorScene::PointLightElement::into_json() const {
         {"colour",       light->colour},
         {"visible",      visible},
         {"visual_scale", visual_scale},
+        {"attenuation", attenuation},
     };
 }
 
@@ -75,6 +77,9 @@ void EditorScene::PointLightElement::add_imgui_edit_section(MasterRenderScene& r
 
     transformUpdated |= ImGui::Checkbox("Show Visuals", &visible);
     transformUpdated |= ImGui::DragFloat("Visual Scale", &visual_scale, 0.01f, 0.0f, FLT_MAX);
+
+    transformUpdated |= ImGui::DragFloat3("Attenuation",&attenuation[0],0.01f,0.0f,FLT_MAX);
+
     ImGui::DragDisableCursor(scene_context.window);
 
     if (transformUpdated) {
@@ -91,6 +96,7 @@ void EditorScene::PointLightElement::update_instance_data() {
     }
 
     light->position = glm::vec3(transform[3]); // Extract translation from matrix
+    light->attenuation = attenuation;
     if (visible) {
         light_sphere->instance_data.model_matrix = transform * glm::scale(glm::vec3{0.1f * visual_scale});
     } else {

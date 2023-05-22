@@ -13,6 +13,7 @@ namespace EditorScene {
 
         // Local transformation
         glm::vec3 position;
+        glm::vec3 attenuation = {0.0f,0.0f,1.0f};
         bool visible = true;
         float visual_scale = 1.0f;
         // PointLight and Entity will store World position
